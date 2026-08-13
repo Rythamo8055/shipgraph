@@ -6,6 +6,7 @@ node_modules/
 .next/
 .DS_Store
 /screenshots/
-data/
 .opencode/
 .gemini/
+data/
+!data/PROVENANCE.md

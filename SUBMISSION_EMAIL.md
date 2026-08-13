@@ -1,66 +1,71 @@
-# SUBMISSION_EMAIL.md — ShipGraph submission mail (Agent E deliverable)
+# SUBMISSION_EMAIL.md — ShipGraph submission mail (Wexa AI — CognoDB take-home)
 
-Ready to send. Copy the block below, fill nothing gated, paste into Gmail
-(to: the hiring manager / founder; subject pre-filled).
+**To:** hr@wexa.ai
+
+**Subject:** CognoDB Assignment 2 – Vishnu Vardhan
 
 ---
 
-**To:** Hiring / Engineering Leadership
+Hi Team,
 
-**Subject:** ShipGraph — a live delivery graph over real open-source data (portfolio submission)
+Please find my submission for the CognoDB take-home assignment.
 
-Hi,
+**Repository:** https://github.com/Rythamo8055/shipgraph
 
-I built a portfolio project you might find interesting: **ShipGraph**, a web app that
-answers one question across a real dataset — *what broke, who shipped it, and who fixed it?*
+**Live demo:** https://feedback-domains-magazines-exceed.trycloudflare.com (a
+Cloudflare quick tunnel to the production build; if the tunnel is down, the app
+runs locally with `npm run dev` — see README Quickstart)
 
-**What it does.** I crawled 15 flagship open-source repositories (Express.js, Vite, and the
-HashiCorp suite — Terraform, Vault, Consul, Nomad, Packer) plus 7 public statuspage feeds.
-Right now the dataset holds **7,847 nodes and 20,296 edges**: engineers, PRs, commits,
-releases, incidents, and services. The app walks those relationships end-to-end — from a
-live incident back to the release deployed to the affected service, the commits that rode
-in it, and the engineers who authored them. It also finds structural paths between any two
-engineers, and traces a release's "blast radius" across services and incidents.
+**Short walkthrough recording:** `docs/screenshots/demo.mp4` in the repo
+(also: 6 screenshots under `docs/screenshots/`)
 
-**Screenshots** (captured against the live app): [home](https://github.com/Rythamo8055/shipgraph/blob/main/docs/screenshots/home.png),
-[incident chain](https://github.com/Rythamo8055/shipgraph/blob/main/docs/screenshots/incident-detail.png),
-[pathfinder](https://github.com/Rythamo8055/shipgraph/blob/main/docs/screenshots/pathfinder.png) —
-all six are in `docs/screenshots/` in the repo.
+**What it is.** ShipGraph is a graph application over real open-source delivery
+history: 15 flagship repos (Express.js, Vite, HashiCorp suite), their merged PRs,
+commits, releases, engineers, and the 7 public statuspage feeds that cover them —
+**7,847 nodes and 20,296 edges**, all from public APIs, zero synthetic data.
 
-**How it's built.** A multi-agent pipeline: Python fetch/normalize/load scripts push the
-graph into a hosted Neo4j-compatible database (CognoDB); a Next.js 15 + TypeScript frontend
-reads it through a fixed, parameterised Cypher layer — no user-supplied queries, no
-string-built Cypher. Heuristically derived edges are flagged `heuristic:true` and surfaced
-honestly in the UI, and the header pill always shows whether you're looking at the live
-database or clearly-marked sample data. The full query contract, schema, and provenance are
-documented in the repo (`CONTRACT.md`, `DESIGN.md`, and an `MODEL_AUDIT.md` that benchmarks
-the model against MNC/FAANG graph practices).
+**The use case.** *What broke, who shipped it, and who fixed it?* From any
+incident the app walks the chain end-to-end: the service affected → the release
+deployed in its blast window → the PRs shipped in that release → the commits →
+the engineers who authored them. It also computes blast radius per release and
+shortest structural paths (≤6 hops) between any two engineers.
 
-**Why a graph database.** This product is fundamentally about *paths*, not rows — "give me
-every engineer who worked on a release deployed to a degraded service" is a multi-hop
-relationship query that would flatten into a pile of joins in SQL. With a graph model the
-walk is expressed natively and stays fast; the README has a worked example of the exact
-Cypher against a live incident.
+**Why a graph database.** Every flagship question is a path question (incident →
+service → release → PR → commit → engineer), which a relational schema would
+flatten into six-plus joins and a recursive path query. In a graph the traversal
+*is* the query — one parameterised Cypher statement, and the hop semantics stay
+visible. The README's "Why a graph database?" section spells this out with the
+exact flagship Cypher.
 
-**Quality.** The app ships green: production build, a Vitest + Testing Library suite
-(components, API fallback behaviour, search combobox a11y), a Python quality suite, and a
-model audit. No data is synthetic; every source URL and fetch date is recorded. The
-pipeline is deterministic and resume-safe (each raw fetch is cached by SHA-256 key), and
-final lands: PR 1,371 / commits 4,065, releases 1,156, incidents 334, services 190.
+**Engineering notes.**
+- Fetch → normalize → load pipeline (`scripts/`), resume-safe: every API response
+  is cached by SHA-256 key, so the crawl is deterministic and reproducible.
+- Heuristic derivations (SHIPPED/DEPLOYED/RESOLVED_BY/WORKED_ON) are explicit
+  edges flagged `heuristic:true` — observed facts vs. derived inference stay
+  inspectable.
+- Parameterised Cypher only; no string-concatenated queries; labels/types
+  interpolated exclusively from schema constants.
+- Credentials live only in gitignored `.env` (CognoDB `bolt+s` URI + password).
+- Graceful degradation: Live/Sample mode pill; sample fixtures mirror the API so
+  the UI works even with the DB unreachable (503 handling sanitised).
+- `CONTRACT.md` is the single source of truth; `PROVENANCE.md` lists every
+  source URL and fetch date; tests cover data quality, live-DB constraints,
+  idempotency, flagship chains and the API contract (Vitest 68/68 + pytest).
 
-Repo: **https://github.com/Rythamo8055/shipgraph** — I'd love a quick call to walk through
-the incident chain or the pathfinding view.
+The CognoDB instance is running and will stay up so you can try the app against
+the live database. Happy to walk through any part of the pipeline or model in a
+follow-up call.
 
-Best,
+Best regards,
 Vishnu Vardhan
 
 ---
 
 ## Sending checklist
 
-- [ ] Attach / link the repository (or `npm run dev` demo video) — do NOT attach `.env`.
-- [ ] If sending to companies from the outreach tracker (TurboHire/ventures list), pick the
-      same `template`/subject tone as the campaign for that company.
-- [ ] Delay: use `send_emails.py` flow if sending from Gmail (35–90s default) or a normal
-      single send — never blast the same mail to many companies in one minute.
-- [ ] Personalize line 1 if the reader is known (name from the CSV).
+- [x] Repository: https://github.com/Rythamo8055/shipgraph (public)
+- [x] Subject: `CognoDB Assignment 2 – Vishnu Vardhan`
+- [x] Demo link: Cloudflare tunnel (README also links it)
+- [x] Screen recording: docs/screenshots/demo.mp4 (+ screenshots in repo)
+- [ ] Sent with SMTP (app password) — confirm in `sent` after send
+- [ ] Do NOT attach `.env` / any credentials

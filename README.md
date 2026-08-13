@@ -10,7 +10,9 @@ data, ever** — and every edge carries provenance, including which ones are heu
 derived (`heuristic:true`).
 
 Built as a multi-agent pipeline; [**`CONTRACT.md`**](CONTRACT.md) is the single source of
-truth for schema, loading rules, and the API contract.
+truth for schema, loading rules, and the API contract. [**`PROVENANCE.md`**](data/PROVENANCE.md)
+lists every source URL, fetch date and license note. **Live demo:**
+[`feedback-domains-magazines-exceed.trycloudflare.com`](https://feedback-domains-magazines-exceed.trycloudflare.com)
 
 ---
 
@@ -56,7 +58,7 @@ flowchart LR
     subgraph Collect["1 · Collect — scripts/acquire/fetch.py"]
         GH[GitHub REST via gh CLI<br/>repos · pulls p1-5 · pr-commits<br/>releases · contributors · repo meta] --> C1[(raw cache .json.gz<br/>sha256-keyed · resume-safe)]
         SP[Statuspage v2 public API<br/>incidents + components × 8 orgs] --> C1
-        EN[enrich_merged_by.py<br/>GET /pulls/{n} → merged_by] --> C1
+        EN["enrich_merged_by.py — GET /pulls/{n} → merged_by"] --> C1
     end
     subgraph Normalize["2 · Normalize — normalize.py"]
         C1 --> N[kind packing · ISO-8601 UTC Z<br/>dedupe · deterministic derivation<br/>SHIPPED/DEPLOYED/RESOLVED_BY/WORKED_ON<br/>heuristic:true]
@@ -95,7 +97,7 @@ flowchart LR
 
 Everything else (`AFFECTED`, `AUTHORED`, `OPENED`, `MERGED_BY`, `COMMITTED`,
 `IMPROVED`, `INCLUDED`) comes straight from API responses. Source URLs, fetch dates and
-license notes live in `data/PROVENANCE.md`.
+license notes live in [`data/PROVENANCE.md`](data/PROVENANCE.md).
 
 ### Why this design
 
@@ -105,7 +107,39 @@ API responses, a reviewer can verify any single edge back to its upstream source
 
 ---
 
-## 3 · Architecture
+## 3 · Why a graph database?
+
+The core questions ShipGraph answers are *path questions*, not *table questions*:
+
+- *Which release deployed to the degraded service, which commits rode in it, and which
+  engineers authored them?* — a 4-hop traversal: Incident → Service → Release →
+  PullRequest → Commit → Engineer.
+- *Is there a structural connection between two engineers?* — an unbounded (≤6-hop)
+  shortest path across shared PRs, commits, releases and incidents.
+- *What is a release's blast radius?* — every service it touches and every incident that
+  overlaps it, regardless of depth.
+
+In a relational schema each of these becomes a chain of joins across six or more tables
+(`incidents`, `incident_components`, `components`, `deployments`, `releases`,
+`release_prs`, `prs`, `pr_commits`, `commits`, `authors`…), with the path question —
+the most interesting one — requiring a recursive join that scales poorly and reads
+nothing like the problem. In a graph database the traversal *is* the query:
+
+```cypher
+MATCH (rel:Release)-[:SHIPPED]->(pr:PullRequest)-[:INCLUDED]->(c:Commit)<-[:AUTHORED]-(e:Engineer)
+MATCH (rel)-[:DEPLOYED]->(s:Service)<-[:AFFECTED]-(i:Incident)
+WHERE i.key = $incidentKey
+RETURN rel.tagName, pr.number, e.login, c.key, s.name
+```
+
+One parameterised statement, zero joins, and the hop semantics stay visible in the
+query itself. The graph model also makes the *data* honest: heuristic derivations are
+first-class edges with an explicit `heuristic:true` flag rather than silently joined
+views, so the boundary between observed fact and derived inference is always inspectable.
+
+---
+
+## 4 · Architecture
 
 ```
 ┌─────────────────────────── Next.js 15 (App Router, TypeScript) ───────────────┐
@@ -131,7 +165,7 @@ API responses, a reviewer can verify any single edge back to its upstream source
 
 ---
 
-## 4 · Graph schema
+## 5 · Graph schema
 
 Seven node labels, eleven relationship types.
 
@@ -168,7 +202,7 @@ Relationship totals (live snapshot): `AFFECTED` 313 · `AUTHORED` 4,065 ·
 
 ---
 
-## 5 · The flagship question
+## 6 · The flagship question
 
 *Which release touched the broken service, which commits rode in it, and who wrote
 them?* — one parameterised Cypher, exposed verbatim at `GET /api/about`:
@@ -191,7 +225,7 @@ would make engineer pairs unreachable.
 
 ---
 
-## 6 · API surface
+## 7 · API surface
 
 All responses are JSON. Errors: `503` DB unreachable (sanitised, no credential
 leakage), `404` missing entity, `400` bad params.
@@ -210,7 +244,7 @@ leakage), `404` missing entity, `400` bad params.
 
 ---
 
-## 7 · Testing
+## 8 · Testing
 
 ```mermaid
 flowchart TB
@@ -220,7 +254,7 @@ flowchart TB
     end
     subgraph PY["Python suite — pytest (live DB + API)"]
         P1[data quality] --> P2[db_live: constraints · floors<br/>idempotency · flagship chain<br/>heuristic flags · orphans]
-        P2 --> P3[api contract × 8 endpoints<br/>(engineer/repo/incident detail, path, blast)]
+        P2 -->         P3["api contract × 8 endpoints — engineer/repo/incident detail, path, blast"]
         P3 --> POK[LOADS twice & verifies sha-identical totals]
     end
     UI --> G[quality gate]
@@ -235,7 +269,7 @@ flowchart TB
 - **Honesty checks** — no foreign labels in the live DB, every heuristic edge carries
   `heuristic:true`, zero orphan relationships, no secrets in git history.
 
-## 8 · Quickstart
+## 9 · Quickstart
 
 ```bash
 npm ci && npm run dev          # Next.js app (auto Sample-mode without DB)
@@ -254,7 +288,7 @@ scripts/audit_model.py         # graph model audit vs contract
 Environment (`.env`, gitignored): `COGNODB_URI`, `COGNODB_USERNAME`,
 `COGNODB_PASSWORD`; GitHub access via `gh auth login` (keyring) or `GITHUB_TOKEN`.
 
-## 9 · Hard rules (enforced)
+## 10 · Hard rules (enforced)
 
 1. No string-concatenated Cypher — labels/types only from `lib/schema.ts` /
    `scripts/acquire/schema.py` constants.
@@ -266,7 +300,7 @@ Environment (`.env`, gitignored): `COGNODB_URI`, `COGNODB_USERNAME`,
    `data/PROVENANCE.md`.
 7. The live DB is a dedicated instance: ShipGraph labels only, nothing foreign.
 
-## 10 · Screenshots
+## 11 · Screenshots
 
 Live UI (dark mode is default; light follows the OS preference):
 
@@ -276,20 +310,20 @@ Live UI (dark mode is default; light follows the OS preference):
 | ![Incident chain](docs/screenshots/incident-detail.png) | ![Repo + blast radius](docs/screenshots/repo-detail.png) |
 | ![Pathfinder](docs/screenshots/pathfinder.png) | ![Engineers](docs/screenshots/engineers.png) |
 
-Captured with the bundled `scripts/screenshot.js` (Playwright, chromium-headless-shell) against the live app.
+Captured with the bundled `scripts/screenshot.js` (Playwright, chromium-headless-shell) against the live app. A short walkthrough recording of the same flows is at [`docs/screenshots/demo.mp4`](docs/screenshots/demo.mp4) (captured with `scripts/record-demo.js`).
 
-## 10 · Status (2026-08-13)
+## 12 · Status (2026-08-13)
 
 | Layer | State |
 |---|---|
-| Data acquisition | ✅ GitHub + statuspage crawl complete, resume-safe caches (~3.4k files) |
+| Data acquisition | ✅ GitHub + statuspage crawl complete, resume-safe caches (1,771 GitHub + statuspage responses, `data/PROVENANCE.md`) |
 | Normalised snapshot | ✅ `data/normalized/` — **7,847 nodes / 20,296 edges**, all contract floors met |
 | Live DB | ✅ CognoDB loaded, `/health` = `{"status":"ok","db":true,"mode":"live"}` |
 | App | ✅ dark-by-default UI, Live/Sample pill, incident chain, pathfinder, blast radius, search |
 | Tests | ✅ Vitest 68/68 · python suites pass on data/load gates (final full re-run is the last step) |
-| Docs | ✅ CONTRACT.md · PRODUCT.md · DESIGN.md · MODEL_AUDIT.md · SUBMISSION_EMAIL.md |
+| Docs | ✅ CONTRACT.md · PRODUCT.md · DESIGN.md · MODEL_AUDIT.md · PROVENANCE.md · SUBMISSION_EMAIL.md |
 
-## 11 · Layout
+## 13 · Layout
 
 ```
 app/            Next.js pages + /api routes (the only server code)

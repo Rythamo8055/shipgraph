@@ -106,7 +106,10 @@ class Dataset:
                                              if isinstance(rec, dict) else ["non-dict"]))
                         continue
                     rtype = rec.get("_type") or rec.get("type")
-                    props = rec.get("props") or {}
+                    STRUCTURAL = {"type", "_type", "from", "to", "fromLabel", "toLabel"}
+                    props = rec.get("props")
+                    if props is None:
+                        props = {k: v for k, v in rec.items() if k not in STRUCTURAL}
                     if not isinstance(props, dict):
                         self.unknown.append((where, ["props non-dict"]))
                         continue

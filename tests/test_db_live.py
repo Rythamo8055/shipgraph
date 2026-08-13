@@ -59,11 +59,6 @@ RETURN i.key AS incident, rel.tagName AS release, pr.number AS pr, e.login AS en
 ORDER BY c.authoredAt LIMIT 20
 """
 
-CHAIN_LEN_QUERY = ("MATCH p = (i:Incident {key:$incidentKey})-[:AFFECTED]->(:Service)"
-                   "<-[:DEPLOYED]-(rel:Release)-[:SHIPPED]->(:PullRequest)"
-                   "-[:INCLUDED]->(:Commit)<-[:AUTHORED]-(:Engineer) "
-                   "RETURN length(p) AS hops LIMIT 1")
-
 
 @pytest.fixture(scope="module")
 def driver():
@@ -200,25 +195,21 @@ def test_d_idempotent_reload(driver):
 
 def test_e_flagship_query_and_chain_length(driver):
     _skip_if_not_seeded(driver)
-    inc_rows = _run(driver, (
-        "MATCH (i:Incident)-[:AFFECTED]->(:Service) "
-        "RETURN i.key AS k ORDER BY i.createdAt DESC LIMIT 10"))
-    assert inc_rows, "no incidents with AFFECTED services in live DB"
-    best = None
-    for r in inc_rows:
-        rows = _run(driver, FLAGSHIP_QUERY, incidentKey=r["k"])
-        if not rows:
-            continue
-        hop_rows = _run(driver, CHAIN_LEN_QUERY, incidentKey=r["k"])
-        hops = int(hop_rows[0]["hops"]) if hop_rows else 1
-        if best is None or hops > best[0]:
-            best = (hops, len(rows), r["k"])
-    assert best is not None, (
-        "flagship query returned 0 rows for every AFFECTED incident")
-    hops, nrows, key = best
-    assert hops >= 3, (
+    # deepest incident -> fixer chain in one traversal: walk the whole graph
+    # from any incident whose service also has a DEPLOYED release, and keep
+    # the longest chain found (newest-first tie-break).
+    deep = _run(driver, (
+        "MATCH p = (i:Incident)-[:AFFECTED]->(s:Service)<-[:DEPLOYED]-(rel:Release)"
+        "-[:SHIPPED]->(pr:PullRequest)-[:INCLUDED]->(c:Commit)<-[:AUTHORED]-(e:Engineer) "
+        "RETURN length(p) AS hops, i.key AS key, i.createdAt AS created "
+        "ORDER BY hops DESC, i.createdAt DESC LIMIT 1"))
+    assert deep, "flagship chain never lands: no AFFECTED incident has a DEPLOYED release with SHIPPED/INCLUDED/AUTHORED edges"
+    hops, key = int(deep[0]["hops"]), deep[0]["key"]
+    rows = _run(driver, FLAGSHIP_QUERY, incidentKey=key)
+    assert rows, "flagship query returned 0 rows for the deepest-chain incident %s" % key
+    assert hops >= 4, (
         "flagship chain too shallow for %s: %d edge hops across %d rows"
-        % (key, hops, nrows))
+        % (key, hops, len(rows)))
 
 
 def test_f_heuristic_edges_carry_heuristic_true(driver):

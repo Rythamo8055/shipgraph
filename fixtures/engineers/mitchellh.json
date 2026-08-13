@@ -1,0 +1,15 @@
+{
+  "engineer": { "login": "mitchellh", "name": "Mitchell Hashimoto", "avatarUrl": "https://avatars.githubusercontent.com/mitchellh?v=4" },
+  "repos": ["terraform", "vault", "consul", "nomad", "packer"],
+  "pullRequests": [
+    { "key": "terraform#32441", "title": "feat: plan-only diff output", "state": "merged", "mergedAt": "2026-04-01T14:12:00Z" },
+    { "key": "terraform#32901", "title": "fix: refresh-only applies for state import", "state": "merged", "mergedAt": "2026-06-02T09:30:00Z" },
+    { "key": "vault#23881", "title": "fix: rate limit retry backoff", "state": "merged", "mergedAt": "2025-12-19T16:20:00Z" },
+    { "key": "nomad#20871", "title": "fix: allocation GC on client drain", "state": "merged", "mergedAt": "2026-01-28T11:49:00Z" }
+  ],
+  "incidents": [
+    { "key": "jq9l5zqcdb9v", "name": "Git operations degraded", "impact": "major", "createdAt": "2026-01-14T17:30:00Z", "resolvedAt": "2026-01-14T19:12:00Z" },
+    { "key": "s2w8e4t6y5", "name": "Database connection errors on free tier", "impact": "major", "createdAt": "2026-06-11T10:22:00Z", "resolvedAt": "2026-06-11T13:54:00Z" },
+    { "key": "5n7t3q8v2b", "name": "Elevated errors on packages registry", "impact": "major", "createdAt": "2026-03-18T14:20:00Z", "resolvedAt": "2026-03-18T18:05:00Z" }
+  ]
+}

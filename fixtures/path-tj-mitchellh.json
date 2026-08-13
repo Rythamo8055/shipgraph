@@ -1,0 +1,12 @@
+{
+  "found": true,
+  "hops": 6,
+  "steps": [
+    { "from": "tj", "rel": "AUTHORED", "to": "commit 9a1f2b3c4d5e", "props": {} },
+    { "from": "commit 9a1f2b3c4d5e", "rel": "COMMITTED", "to": "express", "props": {} },
+    { "from": "express", "rel": "SHIPPED", "to": "release 4.21.2", "props": {} },
+    { "from": "release 4.21.2", "rel": "DEPLOYED", "to": "API", "props": {} },
+    { "from": "API", "rel": "AFFECTED", "to": "incident y3b4qlwp28jy", "props": {} },
+    { "from": "incident y3b4qlwp28jy", "rel": "RESOLVED_BY", "to": "mitchellh", "props": {} }
+  ]
+}

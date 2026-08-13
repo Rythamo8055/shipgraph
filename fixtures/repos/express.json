@@ -1,0 +1,18 @@
+{
+  "repo": { "name": "express", "owner": "expressjs", "language": "JavaScript", "stars": 67213, "createdAt": "2010-05-25T17:39:00Z", "pushedAt": "2026-07-28T15:04:00Z", "defaultBranch": "master" },
+  "contributors": [
+    { "login": "tj", "contributions": 2894 },
+    { "login": "dougwilson", "contributions": 1198 },
+    { "login": "wesleytodd", "contributions": 312 },
+    { "login": "jonathanong", "contributions": 164 }
+  ],
+  "releases": [
+    { "tagName": "5.1.0", "publishedAt": "2026-03-14T20:11:00Z" },
+    { "tagName": "5.0.1", "publishedAt": "2025-12-19T16:00:00Z" },
+    { "tagName": "4.21.2", "publishedAt": "2025-11-12T14:10:00Z" },
+    { "tagName": "4.21.1", "publishedAt": "2025-07-16T11:45:00Z" },
+    { "tagName": "4.21.0", "publishedAt": "2025-05-28T19:02:00Z" },
+    { "tagName": "4.20.5", "publishedAt": "2025-03-02T15:36:00Z" }
+  ],
+  "prs": 1487
+}

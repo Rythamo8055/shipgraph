@@ -1,0 +1,23 @@
+{
+  "incident": {
+    "key": "jq9l5zqcdb9v",
+    "name": "Git operations degraded",
+    "source": "github",
+    "status": "resolved",
+    "impact": "major",
+    "createdAt": "2026-01-14T17:30:00Z",
+    "resolvedAt": "2026-01-14T19:12:00Z",
+    "url": "https://www.githubstatus.com/incidents/jq9l5zqcdb9v"
+  },
+  "services": ["Git Operations"],
+  "chain": {
+    "releases": [
+      { "tagName": "1.9.6", "repo": "terraform", "publishedAt": "2026-01-14T18:30:00Z" }
+    ],
+    "commits": [
+      { "sha": "e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4", "message": "fix: retry failed clone on worker pool", "authoredAt": "2026-01-14T18:02:00Z" },
+      { "sha": "f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f405", "message": "fix: bound concurrent fetches per repo", "authoredAt": "2026-01-14T18:23:00Z" }
+    ],
+    "engineers": ["jefferai", "briankassouf"]
+  }
+}

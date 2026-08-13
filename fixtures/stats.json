@@ -1,0 +1,26 @@
+{
+  "nodes": {
+    "Engineer": 42,
+    "Repo": 15,
+    "PullRequest": 1487,
+    "Commit": 3120,
+    "Release": 412,
+    "Incident": 208,
+    "Service": 27
+  },
+  "edges": {
+    "AUTHORED": 3105,
+    "COMMITTED": 3120,
+    "OPENED": 1487,
+    "MERGED_BY": 1209,
+    "IMPROVED": 1487,
+    "INCLUDED": 3920,
+    "SHIPPED": 2034,
+    "DEPLOYED": 173,
+    "AFFECTED": 162,
+    "RESOLVED_BY": 171,
+    "WORKED_ON": 89
+  },
+  "totalNodes": 5311,
+  "totalEdges": 16957
+}

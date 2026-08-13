@@ -1,0 +1,9 @@
+{
+  "found": true,
+  "hops": 3,
+  "steps": [
+    { "from": "dougwilson", "rel": "AUTHORED", "to": "commit 1c8a4e2fd9b0", "props": {} },
+    { "from": "commit 1c8a4e2fd9b0", "rel": "COMMITTED", "to": "express", "props": {} },
+    { "from": "express", "rel": "WORKED_ON", "to": "tj", "props": { "contributions": 2894 } }
+  ]
+}

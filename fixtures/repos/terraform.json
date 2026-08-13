@@ -1,0 +1,17 @@
+{
+  "repo": { "name": "terraform", "owner": "hashicorp", "language": "Go", "stars": 45880, "createdAt": "2014-07-28T21:01:00Z", "pushedAt": "2026-07-22T16:20:00Z", "defaultBranch": "main" },
+  "contributors": [
+    { "login": "mitchellh", "contributions": 2210 },
+    { "login": "briankassouf", "contributions": 405 },
+    { "login": "jbardin", "contributions": 287 },
+    { "login": "apparentlymart", "contributions": 198 }
+  ],
+  "releases": [
+    { "tagName": "1.11.5", "publishedAt": "2026-07-22T15:00:00Z" },
+    { "tagName": "1.11.2", "publishedAt": "2026-06-10T14:20:00Z" },
+    { "tagName": "1.10.4", "publishedAt": "2026-04-01T13:00:00Z" },
+    { "tagName": "1.9.6", "publishedAt": "2026-01-14T18:30:00Z" },
+    { "tagName": "1.9.0", "publishedAt": "2025-12-11T16:45:00Z" }
+  ],
+  "prs": 3112
+}

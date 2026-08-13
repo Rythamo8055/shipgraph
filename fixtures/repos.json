@@ -1,0 +1,14 @@
+{
+  "repos": [
+    { "name": "express", "language": "JavaScript", "stars": 67213, "pushedAt": "2026-07-28T15:04:00Z", "owners": ["tj", "dougwilson", "wesleytodd"] },
+    { "name": "body-parser", "language": "JavaScript", "stars": 2385, "pushedAt": "2026-06-11T09:22:00Z", "owners": ["dougwilson", "tj"] },
+    { "name": "morgan", "language": "JavaScript", "stars": 8210, "pushedAt": "2026-07-02T18:40:00Z", "owners": ["tj", "dougwilson", "wesleytodd"] },
+    { "name": "vite", "language": "TypeScript", "stars": 72890, "pushedAt": "2026-08-02T11:12:00Z", "owners": ["yyx990803", "patak-dev", "sapphi-red"] },
+    { "name": "plugin-react", "language": "JavaScript", "stars": 3980, "pushedAt": "2026-04-28T14:07:00Z", "owners": ["yyx990803", "sapphi-red"] },
+    { "name": "create-vite", "language": "JavaScript", "stars": 4210, "pushedAt": "2026-05-19T10:33:00Z", "owners": ["yyx990803", "patak-dev"] },
+    { "name": "terraform", "language": "Go", "stars": 45880, "pushedAt": "2026-07-22T16:20:00Z", "owners": ["mitchellh", "briankassouf"] },
+    { "name": "vault", "language": "Go", "stars": 32910, "pushedAt": "2026-07-14T08:41:00Z", "owners": ["jefferai", "armon"] },
+    { "name": "consul", "language": "Go", "stars": 29870, "pushedAt": "2026-06-30T13:55:00Z", "owners": ["armon", "mitchellh"] },
+    { "name": "nomad", "language": "Go", "stars": 16310, "pushedAt": "2026-05-27T12:09:00Z", "owners": ["mitchellh"] }
+  ]
+}

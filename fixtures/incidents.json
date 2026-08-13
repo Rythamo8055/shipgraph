@@ -1,0 +1,18 @@
+{
+  "incidents": [
+    { "key": "y3b4qlwp28jy", "name": "Elevated error rates on API requests", "source": "github", "impact": "major", "createdAt": "2025-11-12T13:02:00Z", "resolvedAt": "2025-11-12T16:41:00Z", "services": ["API"] },
+    { "key": "jq9l5zqcdb9v", "name": "Git operations degraded", "source": "github", "impact": "major", "createdAt": "2026-01-14T17:30:00Z", "resolvedAt": "2026-01-14T19:12:00Z", "services": ["Git Operations"] },
+    { "key": "2x1k8y9m3z", "name": "Delayed webhook delivery", "source": "github", "impact": "minor", "createdAt": "2026-02-02T09:00:00Z", "resolvedAt": "2026-02-02T11:23:00Z", "services": ["Web"] },
+    { "key": "5n7t3q8v2b", "name": "Elevated errors on packages registry", "source": "github", "impact": "major", "createdAt": "2026-03-18T14:20:00Z", "resolvedAt": "2026-03-18T18:05:00Z", "services": ["Registry"] },
+    { "key": "l8p3x6w4c1", "name": "Build queue backlog for preview deployments", "source": "vercel", "impact": "major", "createdAt": "2026-01-23T11:40:00Z", "resolvedAt": "2026-01-23T15:03:00Z", "services": ["Deployments"] },
+    { "key": "m2r5k9h7d3", "name": "Latency spikes on the edge network", "source": "vercel", "impact": "minor", "createdAt": "2026-04-06T02:55:00Z", "resolvedAt": "2026-04-06T04:12:00Z", "services": ["Edge Network"] },
+    { "key": "n4t8b2v6e9", "name": "Preview deployments failing", "source": "vercel", "impact": "major", "createdAt": "2026-05-19T16:00:00Z", "resolvedAt": "2026-05-19T17:48:00Z", "services": ["Deployments"] },
+    { "key": "p6u1c4f8g2", "name": "File save failures for some users", "source": "figma", "impact": "critical", "createdAt": "2026-02-27T12:10:00Z", "resolvedAt": "2026-02-27T15:36:00Z", "services": ["Web", "API"] },
+    { "key": "r7v9d3h5k1", "name": "Sign-in delays and timeout errors", "source": "1password", "impact": "minor", "createdAt": "2026-03-09T07:45:00Z", "resolvedAt": "2026-03-09T09:03:00Z", "services": ["Authentication"] },
+    { "key": "s2w8e4t6y5", "name": "Database connection errors on free tier", "source": "supabase", "impact": "major", "createdAt": "2026-06-11T10:22:00Z", "resolvedAt": "2026-06-11T13:54:00Z", "services": ["Database"] },
+    { "key": "t4u6i8o2p3", "name": "Storage upload errors", "source": "supabase", "impact": "minor", "createdAt": "2026-07-02T15:30:00Z", "resolvedAt": null, "services": ["Database"] },
+    { "key": "v6x8z2b4n7", "name": "Scheduled maintenance: database failover", "source": "supabase", "impact": "none", "createdAt": "2026-08-10T22:00:00Z", "resolvedAt": null, "services": ["Database"] },
+    { "key": "w8q1s3d5f9", "name": "Jira availability degraded", "source": "atlassian", "impact": "major", "createdAt": "2026-04-22T08:30:00Z", "resolvedAt": "2026-04-22T10:15:00Z", "services": ["Dashboard"] },
+    { "key": "x2c4v6b8n0", "name": "Elevated API latency", "source": "linear", "impact": "minor", "createdAt": "2026-05-30T13:05:00Z", "resolvedAt": "2026-05-30T13:41:00Z", "services": ["API"] }
+  ]
+}

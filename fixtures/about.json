@@ -1,0 +1,52 @@
+{
+  "queries": [
+    {
+      "name": "Overview counts",
+      "description": "Total nodes per label and relationships per type — powers the stats cards on the home page.",
+      "cypher": "MATCH (n)\nRETURN labels(n)[0] AS label, count(n) AS count\nORDER BY count DESC",
+      "params": []
+    },
+    {
+      "name": "Text search",
+      "description": "Prefix search across people, code, incidents, and services. Fully parameterised, no free-form Cypher.",
+      "cypher": "MATCH (n)\nWHERE toLower(n.key) CONTAINS toLower($q)\n   OR coalesce(toLower(n.name), '') CONTAINS toLower($q)\n   OR toLower(n.title) CONTAINS toLower($q)\nRETURN n LIMIT 25",
+      "params": ["q"]
+    },
+    {
+      "name": "Engineer profile",
+      "description": "Repos worked on and incidents resolved for one engineer.",
+      "cypher": "MATCH (e:Engineer {login: $login})\nOPTIONAL MATCH (e)-[:WORKED_ON]->(r:Repo)\nOPTIONAL MATCH (e)-[:RESOLVED_BY]->(i:Incident)\nRETURN e,\n       collect(DISTINCT r.name) AS repos,\n       collect(DISTINCT {key: i.key, name: i.name, impact: i.impact}) AS incidents",
+      "params": ["login"]
+    },
+    {
+      "name": "Repo profile",
+      "description": "Contributors (with contribution counts) and release tags for one repo.",
+      "cypher": "MATCH (r:Repo {name: $name})\nOPTIONAL MATCH (c:Engineer)-[w:WORKED_ON]->(r)\nOPTIONAL MATCH (rel:Release)-[:SHIPPED]->(r)\nRETURN r,\n       collect(DISTINCT {login: c.login, contributions: w.contributions}) AS contributors,\n       collect(DISTINCT rel.tagName) AS releases",
+      "params": ["name"]
+    },
+    {
+      "name": "Incidents by impact",
+      "description": "Recent incidents, optionally filtered by impact severity.",
+      "cypher": "MATCH (i:Incident)\nWHERE i.impact = $impact OR $impact = 'all'\nRETURN i\nORDER BY i.createdAt DESC\nLIMIT 50",
+      "params": ["impact"]
+    },
+    {
+      "name": "Chain: what broke, who shipped it, who fixed it",
+      "description": "Flagship query. For one incident: the releases deployed into the affected service, the pull requests riding those releases, the commits they carried, and the engineers who authored them. Runs inside the incident window (start ± 6h).",
+      "cypher": "MATCH (i:Incident {key:$incidentKey})-[:AFFECTED]->(s:Service)<-[:DEPLOYED]-(rel:Release)\nMATCH (rel)-[:SHIPPED]->(pr:PullRequest)-[:INCLUDED]->(c:Commit)<-[:AUTHORED]-(e:Engineer)\nRETURN i.key AS incident, rel.tagName AS release, pr.number AS pr, e.login AS engineer, c.key AS commit\nORDER BY c.authoredAt LIMIT 20",
+      "params": ["incidentKey"]
+    },
+    {
+      "name": "Blast radius",
+      "description": "Multi-hop proof: release of a repo -> services it deployed to -> incidents affecting those services.",
+      "cypher": "MATCH (rel:Release {repo: $repo})-[:DEPLOYED]->(s:Service)<-[:AFFECTED]-(i:Incident)\nRETURN rel.tagName AS release,\n       collect(DISTINCT s.name) AS services,\n       collect(DISTINCT i.key) AS incidents\nLIMIT 1",
+      "params": ["repo"]
+    },
+    {
+      "name": "Path between engineers",
+      "description": "Shortest undirected path (max 6 hops) between two engineers across the delivery graph.",
+      "cypher": "MATCH p = shortestPath((a:Engineer {login: $from})-[*1..6]-(b:Engineer {login: $to}))\nRETURN [n IN nodes(p) | coalesce(n.login, n.key, n.name)] AS path",
+      "params": ["from", "to"]
+    }
+  ]
+}

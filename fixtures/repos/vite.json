@@ -1,0 +1,17 @@
+{
+  "repo": { "name": "vite", "owner": "vitejs", "language": "TypeScript", "stars": 72890, "createdAt": "2020-04-19T09:40:00Z", "pushedAt": "2026-08-02T11:12:00Z", "defaultBranch": "main" },
+  "contributors": [
+    { "login": "yyx990803", "contributions": 1842 },
+    { "login": "patak-dev", "contributions": 621 },
+    { "login": "sapphi-red", "contributions": 448 },
+    { "login": "bluwy", "contributions": 214 }
+  ],
+  "releases": [
+    { "tagName": "7.2.4", "publishedAt": "2026-07-30T10:05:00Z" },
+    { "tagName": "7.2.1", "publishedAt": "2026-06-28T09:14:00Z" },
+    { "tagName": "7.0.0", "publishedAt": "2026-04-09T08:00:00Z" },
+    { "tagName": "6.3.1", "publishedAt": "2026-02-14T12:30:00Z" },
+    { "tagName": "6.0.0", "publishedAt": "2025-11-26T15:00:00Z" }
+  ],
+  "prs": 3210
+}

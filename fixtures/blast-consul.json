@@ -1,0 +1,5 @@
+{
+  "release": { "tagName": "1.9.6", "publishedAt": "2026-01-14T18:30:00Z" },
+  "services": ["API"],
+  "incidents": ["y3b4qlwp28jy", "jq9l5zqcdb9v"]
+}

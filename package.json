@@ -11,15 +11,9 @@
   },
   "dependencies": {
     "neo4j-driver": "^5.28.0",
-<<<<<<< HEAD
     "next": "^15.5.23",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
-=======
-    "next": "^15.5.23",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
->>>>>>> 80f3547 (Deploy to Vercel: next 15.5.23 (patched CVE-2025-66478), add icon.svg, README live-demo link)
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^11.16.0",

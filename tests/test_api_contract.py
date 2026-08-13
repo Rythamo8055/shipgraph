@@ -196,20 +196,24 @@ def test_blast_multi_hop():
 
 
 def test_path_endpoint():
-    engineers = _get("/api/engineers?limit=2")["engineers"]
-    if len(engineers) < 2:
-        pytest.skip("need >=2 engineers for path test")
+    repos = _get("/api/repos?limit=20")["repos"] or pytest.skip(
+        "no repos seeded - cannot pick a connected engineer pair")
+    pair = None
+    for r in repos:
+        if r["owners"]:
+            pair = r["owners"][:2]
+            break
+    if pair is None or len(pair) < 2:
+        pytest.skip("no repo with >=2 owners to form a connected pair")
     body = _get("/api/path?from=%s&to=%s" % (
-        urllib.request.quote(engineers[0]["login"]),
-        urllib.request.quote(engineers[1]["login"])))
+        urllib.request.quote(pair[0]),
+        urllib.request.quote(pair[1])))
     _require_shape(body, {"found": bool, "hops": int, "steps": list}, "/api/path")
-    assert body["hops"] >= 1, "path between two engineers should exist"
-    if body["found"]:
-        for s in body["steps"]:
-            _require_shape(s, {"from": str, "rel": str, "to": str, "props": dict},
-                           "path.steps")
-    else:
-        assert body["hops"] == 0 and body["steps"] == []
+    assert body["found"] and body["hops"] >= 1, (
+        "path should exist between two owners of the same repo")
+    for s in body["steps"]:
+        _require_shape(s, {"from": str, "rel": str, "to": str, "props": dict},
+                       "path.steps")
 
 
 def test_path_not_found_shape():

@@ -8,9 +8,10 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ name: string }> },
+  context: { params: Promise<{ name: string[] }> },
 ): Promise<Response> {
-  const { name } = await context.params;
+  const { name: segments } = await context.params;
+  const name = decodeURIComponent(segments.join('/'));
   const limit = parseLimit(request.nextUrl.searchParams.get('limit'), 50);
   if (typeof limit !== 'number') return limit;
 

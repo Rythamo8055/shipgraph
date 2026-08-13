@@ -266,6 +266,18 @@ Environment (`.env`, gitignored): `COGNODB_URI`, `COGNODB_USERNAME`,
    `data/PROVENANCE.md`.
 7. The live DB is a dedicated instance: ShipGraph labels only, nothing foreign.
 
+## 10 · Screenshots
+
+Live UI (dark mode is default; light follows the OS preference):
+
+| | |
+|---|---|
+| ![Home](docs/screenshots/home.png) | ![Incidents](docs/screenshots/incidents.png) |
+| ![Incident chain](docs/screenshots/incident-detail.png) | ![Repo + blast radius](docs/screenshots/repo-detail.png) |
+| ![Pathfinder](docs/screenshots/pathfinder.png) | ![Engineers](docs/screenshots/engineers.png) |
+
+Captured with the bundled `scripts/screenshot.js` (Playwright, chromium-headless-shell) against the live app.
+
 ## 10 · Status (2026-08-13)
 
 | Layer | State |

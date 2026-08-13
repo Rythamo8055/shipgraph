@@ -12,9 +12,8 @@ Please find my submission for the CognoDB take-home assignment.
 
 **Repository:** https://github.com/Rythamo8055/shipgraph
 
-**Live demo:** https://feedback-domains-magazines-exceed.trycloudflare.com (a
-Cloudflare quick tunnel to the production build; if the tunnel is down, the app
-runs locally with `npm run dev` — see README Quickstart)
+**Live demo:** https://shipgraph-lovat.vercel.app (deployed on Vercel, connected to
+the live CognoDB instance)
 
 **Short walkthrough recording:** `docs/screenshots/demo.mp4` in the repo
 (also: 6 screenshots under `docs/screenshots/`)
@@ -65,7 +64,7 @@ Vishnu Vardhan
 
 - [x] Repository: https://github.com/Rythamo8055/shipgraph (public)
 - [x] Subject: `CognoDB Assignment 2 – Vishnu Vardhan`
-- [x] Demo link: Cloudflare tunnel (README also links it)
+- [x] Demo link: https://shipgraph-lovat.vercel.app (Vercel production)
 - [x] Screen recording: docs/screenshots/demo.mp4 (+ screenshots in repo)
 - [ ] Sent with SMTP (app password) — confirm in `sent` after send
 - [ ] Do NOT attach `.env` / any credentials

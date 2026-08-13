@@ -11,8 +11,8 @@ derived (`heuristic:true`).
 
 Built as a multi-agent pipeline; [**`CONTRACT.md`**](CONTRACT.md) is the single source of
 truth for schema, loading rules, and the API contract. [**`PROVENANCE.md`**](data/PROVENANCE.md)
-lists every source URL, fetch date and license note. **Live demo:**
-[`feedback-domains-magazines-exceed.trycloudflare.com`](https://feedback-domains-magazines-exceed.trycloudflare.com)
+lists every source URL, fetch date and license note. **Live demo (Vercel):**
+[**`shipgraph-lovat.vercel.app`**](https://shipgraph-lovat.vercel.app)
 
 ---
 

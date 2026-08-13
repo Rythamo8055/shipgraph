@@ -10,3 +10,4 @@ node_modules/
 .gemini/
 data/
 !data/PROVENANCE.md
+.vercel
